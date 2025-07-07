@@ -1,2 +1,10 @@
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+API_KEY = os.getenv('API_KEY')
+
+
 def api_key():
-    return "cd5b0b1dde2a91b2b2b8b92c0d507c83"
+    return API_KEY

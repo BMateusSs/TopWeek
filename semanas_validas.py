@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, date, time
 from data_de_registro import data_de_registro
 
-
 def calcular_primeira_sexta(dia_atual):
     dia_da_semana = dia_atual.weekday()
 
