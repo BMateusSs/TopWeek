@@ -26,9 +26,7 @@ def calcular_semana(user, hoje):
 
     return semanas
 
-def converter_para_datetime(sexta, quinta):
-    sexta_datetime = datetime(sexta.year, sexta.month, sexta.day, hour=0, minute=0, second=0)
-    quinta_datetime = datetime(quinta.year, quinta.month, quinta.day, hour=23, minute=59, second=59)
+
 
 if __name__ == '__main__':
     data = date(2025, 6, 7)
