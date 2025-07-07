@@ -2,15 +2,21 @@ from datetime import date
 from semanas_validas import calcular_semana
 from dotenv import load_dotenv
 import os
+from connection_db import fazer_conexao
 
 load_dotenv()
 
 USER = os.getenv('USER')
 
-def inserir():
-    hoje = date.today()
-    return calcular_semana(USER, hoje)
+def inserir(user_id, start_date, end_date):
+    conexao = fazer_conexao()
 
-semanas = inserir()
-for s in semanas:
-    print(s)
+    cursor = conexao.cursor()
+
+    sql = ("""
+    INSERT INTO weekly_chart_metadata(user_id, start_date, end_date)
+    VALUES(%s, %s, %s)
+""")
+    cursor.execute(sql, (user_id, start_date, end_date))
+    conexao.commit()
+
