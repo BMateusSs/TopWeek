@@ -2,6 +2,8 @@ import os
 from dotenv import load_dotenv
 import requests
 
+from requisicao_capa_album import requerir_capa_album
+
 load_dotenv()
 
 USER = os.getenv('USER')
@@ -34,11 +36,19 @@ def requerir_albuns(start_date, end_date):
         album['novo_rank'] = i  # Atribui a posição correta
 
     # Exibe os resultados
+    chart = []
     for album in albuns_ordenados:
-        print(f"Rank: {album['novo_rank']}")
-        print(f"Plays: {album['playcount']}")
-        print(f"Artista: {album['artist']['#text']}")
-        print(f"Álbum: {album['name']}")
-        print('=-' * 50)
+
+        rank = album['novo_rank']
+        plays = album['playcount']
+        artista = album['artist']['#text']
+        album_nome = album['name']
+        artista_mbid = album['artist']['mbid']
+        mbid = album['mbid']
+        capa = requerir_capa_album(album['name'], album['artist']['#text'])
+        album['cover'] = capa
+        chart.append(album)
+    
+    return chart
         
 requerir_albuns(1750982400, 1751587199)
