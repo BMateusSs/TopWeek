@@ -24,31 +24,36 @@ def requerir_albuns(start_date, end_date):
     dados = response.json()
 
     albuns = dados['weeklyalbumchart']['album']
-    
-    # Ordena por playcount (decrescente) e nome do álbum (A-Z)
-    albuns_ordenados = sorted(
-        albuns,
-        key=lambda x: (-int(x['playcount']), x['name'].lower())
-    )
 
-    # Adiciona um novo rank baseado na ordenação
-    for i, album in enumerate(albuns_ordenados, start=1):
-        album['novo_rank'] = i  # Atribui a posição correta
-
-    # Exibe os resultados
     chart = []
-    for album in albuns_ordenados:
+    capa_cache = {}  # ← dicionário para armazenar capas já buscadas
 
-        rank = album['novo_rank']
-        plays = album['playcount']
-        artista = album['artist']['#text']
-        album_nome = album['name']
-        artista_mbid = album['artist']['mbid']
-        mbid = album['mbid']
-        capa = requerir_capa_album(album['name'], album['artist']['#text'])
-        album['cover'] = capa
-        chart.append(album)
-    
+    for album in albuns:
+        try:
+            nome = album.get('name')
+            artista = album['artist'].get('#text')
+            chave = (nome, artista)
+
+            if chave in capa_cache:
+                capa = capa_cache[chave]
+            else:
+                capa = requerir_capa_album(nome, artista)
+                capa_cache[chave] = capa  # armazena no cache
+
+            album_info = {
+                'mbid': album.get('mbid') or None,
+                'artist_mbid': album['artist'].get('mbid') or None,
+                'album_name': nome,
+                'artist_name': artista,
+                'playcount': album.get('playcount'),
+                'rank': album['@attr'].get('rank'),
+                'cover': capa
+            }
+
+            chart.append(album_info)
+
+        except Exception as e:
+            print(f"Erro ao processar álbum: {album}. Erro: {e}")
+            continue
+
     return chart
-        
-requerir_albuns(1750982400, 1751587199)

@@ -14,10 +14,9 @@ def calcular_primeira_sexta(dia_atual):
 def calcular_semana(user, hoje):
     data = data_de_registro(user)
     sexta = calcular_primeira_sexta(data)
-    verdade = True
     semanas = []
 
-    while verdade:
+    while True:
         quinta = sexta + timedelta(days=6)
         if quinta >= hoje:
             break
