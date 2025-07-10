@@ -3,6 +3,7 @@ import os
 from datetime import date, datetime
 from connection_db import fazer_conexao
 from requisicao_de_albums import requerir_albuns
+from consultar_metadatas import consultar_metadatas
 
 import sys
 import io
@@ -52,16 +53,7 @@ ON DUPLICATE KEY UPDATE
     print(f'{id} - {rank} - {album_nome} - {artista} - {playcount}')
 
 def consultar_datas():
-    conexao = fazer_conexao()
-    cursor = conexao.cursor()
-
-    sql = '''
-    SELECT id, start_date, end_date
-    FROM weekly_chart_metadata
-    WHERE user_id = %s
-    '''
-    cursor.execute(sql, (1,))
-    dados = cursor.fetchall()
+    dados = consultar_metadatas(1)
     
     for id, inicio, final in dados:
         data_inicial, data_final = converter_unimax(inicio, final)
