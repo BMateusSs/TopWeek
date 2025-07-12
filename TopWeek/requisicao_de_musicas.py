@@ -31,6 +31,7 @@ def requisicao_de_musicas(data_inicial, data_final):
     musicas = dados['weeklytrackchart']['track']
 
     capa_cache = {}
+    musicas_info_list = []
 
     for musica in musicas:
         try: 
@@ -44,7 +45,7 @@ def requisicao_de_musicas(data_inicial, data_final):
                 capa = requerir_capa_musica(nome, artista)
                 capa_cache[chave] = capa
 
-            musicas_info = {   
+            musica_info = {   
                 'mbid': musica.get('mbid') or None,
                 'artist_mbid': musica['artist'].get('mbid') or None,
                 'track_name': nome,
@@ -53,10 +54,12 @@ def requisicao_de_musicas(data_inicial, data_final):
                 'rank': musica['@attr'].get('rank'),
                 'cover': capa
                 }
-            print(musicas_info)
+            musicas_info_list.append(musica_info)
 
         except Exception as e:
-            print(f"Erro ao processar álbum: {musica}. Erro: {e}")
+            print(f"Erro ao processar música: {musica}. Erro: {e}")
             continue
-        
+    
+    return musicas_info_list
+
 requisicao_de_musicas(1750982400, 1751500800)
